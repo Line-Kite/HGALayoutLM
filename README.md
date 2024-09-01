@@ -33,7 +33,7 @@ pip install -r requirements.txt
 
   |Model on CORD                                                                                                                | precision | recall |    f1    | accuracy |
   |:---------------------------------------------------------------------------------------------------------------------------:|:---------:|:------:|:--------:|:--------:|
-  | [hgalayoutlm-base-finetuned-cord](https://pan.baidu.com/s/1cMN8urfvHwceZXorMWHbLA)  |   0.9767  | 0.9738 |  0.9753  |  0.9737  |
+  | [hgalayoutlm-base-finetuned-cord](https://pan.baidu.com/s/1gGvsZWGY81vcIIZDQYCAwA)  |   0.9767  | 0.9738 |  0.9753  |  0.9737  |
   | [hgalayoutlm-large-finetuned-cord](https://pan.baidu.com/s/1PtE3Y12_5-Ap-cPUGvFwZg) |   0.9834  | 0.9768 |  0.9801  |  0.9805  |
 
 Download the model weights and move it to the directory "pretrained".
@@ -51,7 +51,7 @@ CUDA_VISIBLE_DEVICES=0,1 accelerate launch --main_process_port 20655 run_cord.py
     --model_name_or_path ../pretrained/hgalayoutlm-base  \
     --output_dir ../path/cord/base/test \
     --segment_level_layout 1 --visual_embed 1 --input_size 224 \
-    --max_steps 2000 --save_steps -1 --evaluation_strategy steps --eval_steps 100 \
+    --max_steps 2000 --save_strategy steps --save_total_limit 5 --save_steps 400 --evaluation_strategy steps --eval_steps 100 \
     --learning_rate 5e-5 --per_device_train_batch_size 2 --gradient_accumulation_steps 1 \
     --dataloader_num_workers 8 --overwrite_output_dir
 ```
@@ -67,7 +67,7 @@ CUDA_VISIBLE_DEVICES=0,1 accelerate launch --main_process_port 20655 run_cord.py
     --model_name_or_path ../pretrained/hgalayoutlm-large  \
     --output_dir ../path/cord/large/test \
     --segment_level_layout 1 --visual_embed 1 --input_size 224 \
-    --max_steps 2000 --save_steps -1 --evaluation_strategy steps --eval_steps 100 \
+    --max_steps 2000 --save_strategy steps --save_total_limit 5 --save_steps 400  --evaluation_strategy steps --eval_steps 100 \
     --learning_rate 5e-5 --per_device_train_batch_size 2 --gradient_accumulation_steps 1 \
     --dataloader_num_workers 8 --overwrite_output_dir
 ```

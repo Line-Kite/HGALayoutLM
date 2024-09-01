@@ -204,7 +204,7 @@ def main():
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
-    # set_seed(40)
+
 
     if data_args.dataset_name == 'cord':
         import data.cord.cord
