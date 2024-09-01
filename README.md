@@ -27,22 +27,20 @@ pip install -r requirements.txt
 | hgalayoutlm-large | [hgalayoutlm-large](https://pan.baidu.com/s/10Cln5iNXCvWkInIZvOP8-g) |
 
 
-### Finetuning Examples
+## Finetuning Examples
 
-#### CORD
+### CORD
 
   |Model on CORD                                                                                                                | precision | recall |    f1    | accuracy |
   |:---------------------------------------------------------------------------------------------------------------------------:|:---------:|:------:|:--------:|:--------:|
   | [hgalayoutlm-base-finetuned-cord](https://pan.baidu.com/s/1cMN8urfvHwceZXorMWHbLA)  |   0.9767  | 0.9738 |  0.9753  |  0.9737  |
   | [hgalayoutlm-large-finetuned-cord](https://pan.baidu.com/s/1PtE3Y12_5-Ap-cPUGvFwZg) |   0.9834  | 0.9768 |  0.9801  |  0.9805  |
 
-### finetune
-
 Download the model weights and move it to the directory "pretrained".
 
 Download the [CORD](https://huggingface.co/datasets/naver-clova-ix/cord-v2) dataset and move it to the directory "datasets".
 
-#### base
+#### Base
 
 ```
 cd examples
@@ -58,7 +56,7 @@ CUDA_VISIBLE_DEVICES=0,1 accelerate launch --main_process_port 20655 run_cord.py
     --dataloader_num_workers 8 --overwrite_output_dir
 ```
 
-#### large
+#### Large
 
 ```
 cd examples
