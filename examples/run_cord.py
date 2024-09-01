@@ -282,18 +282,6 @@ def main():
         use_auth_token=True if model_args.use_auth_token else None,
     )
     
-    # import torch.nn as nn
-    # # 64 4 1 1
-    # torch.manual_seed(76)
-    # def init_model(model):
-    #     for m in model.children():
-    #         if isinstance(m, (nn.Conv2d, nn.Linear)):
-    #             nn.init.xavier_normal_(m.weight)
-    #             logging.info('init mode successful')
-    # init_model(model.head)
-    # m_type=model_args.model_name_or_path.split("-")[-1]
-    # model.save_pretrained(f"/data/liqw/projects/HGALayoutLM/checkpoints/init/{m_type}")
-
     # Tokenizer check: this script requires a fast tokenizer.
     if not isinstance(tokenizer, PreTrainedTokenizerFast):
         raise ValueError(
@@ -473,33 +461,7 @@ def main():
     def compute_metrics(p):
         predictions, labels = p
         predictions = np.argmax(predictions, axis=2)
-        # predictions, labels = p
         labels=labels[0]
-        # batch_size=predictions.size()[0]
-        # seq_len=predictions.size()[2]
-        # # logits=logits-1e12*create_mask(bbox,seq_len,self.num_labels)
-        # final_logits=np.zeros((batch_size,seq_len,2*num_labels+1),device=predictions.device)
-        # final_logits[:,:,-1]=0.8
-        # label_matrix=np.where(np.sigmoid(predictions)>0.5,predictions,torch.zeros_like(predictions))
-        # label_matrix=torch.max(label_matrix,dim=1)
-        # pro_matrix=label_matrix.values
-        # label_matrix=label_matrix.indices
-        # zeros_line=torch.zeros((seq_len),device=predictions.device)
-        # d_p=0.2/(seq_len+1)
-        # # label_record=-torch.ones((batch_size,seq_len),device=logits.device)
-        # for i,(matrix_i,labels_i) in enumerate(zip(pro_matrix,label_matrix)):
-        #     for j,(line,labels_line) in enumerate(zip(matrix_i,labels_i)):
-        #         if line.equal(zeros_line):
-        #             continue
-        #         else:
-        #             end=torch.max(line,dim=0).indices.item()
-        #             # label_record[i,j:end]=labels_line[end].item()
-        #             bio_label=labels_line[end].item()*2
-        #             final_logits[i,j,bio_label]=0.8+(j+1)*d_p
-        #             final_logits[i,j+1:end+1,bio_label+1]=0.8+(j+1)*d_p
-
-
-        # predictions = np.argmax(final_logits, axis=2)
 
         # Remove ignored index (special tokens)
         true_predictions = [
