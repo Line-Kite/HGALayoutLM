@@ -38,7 +38,7 @@ pip install -r requirements.txt
 
 Download the model weights and move it to the directory "pretrained".
 
-Download the [CORD](https://drive.google.com/drive/folders/14OEWr86qotVBMAsWk7lymMytxn5u-kM6) dataset and move it to the directory "datasets".
+Download the [CORD](https://drive.google.com/drive/folders/14OEWr86qotVBMAsWk7lymMytxn5u-kM6) dataset. Rename it "CORD" and move it to the directory "datasets".
 
 #### Base
 
