@@ -156,12 +156,6 @@ class HGAHead(nn.Module):
         self.inner_dim=64
         self.dense = nn.Linear(config.hidden_size, self.num_labels * self.inner_dim * 2)
         self.RoPE=True
-        # classifier_dropout = (
-        #     config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
-        # )
-        # self.dropout = nn.Dropout(classifier_dropout)
-        # self.dense0 = nn.Linear(config.hidden_size, config.hidden_size)
-        # self.d=0.05
     
     def sinusoidal_position_embedding(self, batch_size, seq_len, output_dim, device):
         position_ids = torch.arange(0, seq_len, dtype=torch.float).unsqueeze(-1)
@@ -202,8 +196,6 @@ class HGAHead(nn.Module):
         # x = features[:, 0, :]  # take <s> token (equiv. to [CLS])
         batch_size = x.size()[0]
         seq_len = x.size()[1]
-        
-        # x = self.dropout(x)
 
         outputs = self.dense(x)
         outputs = torch.split(outputs, self.inner_dim * 2, dim=-1)
@@ -224,15 +216,12 @@ class HGAHead(nn.Module):
             kw2 = kw2.reshape(kw.shape)
             kw = kw * cos_pos + kw2 * sin_pos
     
-        # logits:(batch_size, ent_type_size, seq_len, seq_len)
         logits = torch.einsum('bmhd,bnhd->bhmn', qw, kw)
 
-        # padding mask
         pad_mask = attention_mask.unsqueeze(1).unsqueeze(1).expand(batch_size, self.num_labels, seq_len, seq_len)
         # pad_mask = pad_mask_v&pad_mask_h
         logits = logits * pad_mask - (1 - pad_mask) * 1e12
 
-        # 排除下三角
         mask = torch.tril(torch.ones_like(logits), -1)
         
         logits = logits - (mask) * 1e12
@@ -308,7 +297,6 @@ class HGALayoutLMForTokenClassification(GraphLayoutLMPreTrainedModel):
 
         sequence_output = outputs[0]
 
-        # sequence_output = self.dropout(sequence_output)
         logits = self.head(sequence_output, attention_mask, bbox)
 
         def loss_fun(y_pred, y_true):
@@ -335,7 +323,6 @@ class HGALayoutLMForTokenClassification(GraphLayoutLMPreTrainedModel):
         label_matrix=label_matrix.indices
         zeros_line=torch.zeros((seq_len),device=logits.device)
         d_p=0.2/(seq_len+1)
-        # label_record=-torch.ones((batch_size,seq_len),device=logits.device)
         for i,(matrix_i,labels_i) in enumerate(zip(pro_matrix,label_matrix)):
             for j,(line,labels_line) in enumerate(zip(matrix_i,labels_i)):
                 if line.equal(zeros_line):
@@ -347,8 +334,7 @@ class HGALayoutLMForTokenClassification(GraphLayoutLMPreTrainedModel):
                     final_logits[i,j,bio_label]=0.8+(j+1)*d_p
                     final_logits[i,j+1:end+1,bio_label+1]=0.8+(j+1)*d_p
         logits = final_logits
-        # print(labels)
-        # exit(0)
+
 
         if not return_dict:
             output = (logits,) + outputs[2:]
